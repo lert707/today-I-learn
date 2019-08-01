@@ -1,12 +1,3 @@
-
-## 四次挥手
-  男：我要挂了哦
-  女：等哈，我还要敷面膜
-  女：我敷完了，现在可以挂了
-  男：我舍不得挂，你挂吧
-  女：好吧，我挂了
-  男：等了2MSL听见嘟嘟嘟的声音后挂断
-
 ## 异步 setTimeout Promist async/await
 ```javascript
   async function async1() {
@@ -88,8 +79,6 @@
 
 ## 深拷贝 浅拷贝
 
-
-## 深拷贝 浅拷贝
   1. JSON.parse(JSON.stringify())可以用来深拷贝,但是有几个注意点
 
 	  会忽略 undefined
@@ -132,8 +121,65 @@
       return result;
     }
   ```
+
 ## for in
 
   - for(let key in arr) 我一直以为这种只能用来遍历对象。原来数组也是可以的
   	但是 for in遍历数组效率极差。所以还是老老实实用for。
   
+## js实现sleep函数
+
+```javascript
+  function sleep(interval) {
+    return new Promise(resolve => {
+      setTimeout(resolve, interval);
+    })
+  }
+  async function test() {
+    for (let i = 0; i < 10; i++) {
+      console.log(i);
+      await sleep(1000)
+    }
+  }
+```
+
+## react中让setState支持 async 调用
+
+```javascript
+  // 定义
+  setStateAsync(state) {
+    return new Promise((resolve) => {
+      this.setState(state, resolve);
+    });
+  }
+  // 使用
+  async fn() {
+    await setStateAsync({a: 1})
+  }
+```
+
+## 利用a标签解析URL
+
+```javascript
+  function parseURL(url) {
+    var a =  document.createElement('a');
+    a.href = url;
+    return {
+        host: a.hostname,
+        port: a.port,
+        query: a.search,
+        params: (function(){
+            var ret = {},
+                seg = a.search.replace(/^\?/,'').split('&'),
+                len = seg.length, i = 0, s;
+            for (;i<len;i++) {
+                if (!seg[i]) { continue; }
+                s = seg[i].split('=');
+                ret[s[0]] = s[1];
+            }
+            return ret;
+        })(),
+        hash: a.hash.replace('#','')
+    };
+  }
+```
